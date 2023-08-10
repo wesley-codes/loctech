@@ -1,6 +1,7 @@
 "use client";
 
 import * as yup from "yup";
+import { InstructorType } from "../types/_types";
 
 const passwordRegex = `^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()-=_+{};':\"\\|,.<>/?]).{8,}$`;
 
@@ -53,12 +54,11 @@ export const SignUpSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords does not match"),
 });
 
-export const instructorSchema = yup.object().shape({
-  name: yup.string().required("This field is required"),
+export const instructorSchema= yup.object().shape({
+  name: yup.string().required('Name is required'),
   bio: yup.string(),
-  email: yup.string().email("Invalid email"),
-  instructorImage: yup.string(),
-  rating: yup.number(),
+  email: yup.string().email('Invalid email address').required("This field is required"),
+  rating: yup.number().min(0).max(5),
   reviews: yup.string(),
   facebook: yup.string(),
   twitter: yup.string(),
@@ -67,6 +67,7 @@ export const instructorSchema = yup.object().shape({
   reviewer: yup.string(),
   reviewerImage: yup.string(),
   reviewerComment: yup.string(),
+  instructorImage: yup.string(),
 });
 
 export const heroSchema = yup.object().shape({

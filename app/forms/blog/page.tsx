@@ -13,7 +13,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { useSearchParams } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 export default function Page() {
   const searchParams = useSearchParams()
 
@@ -25,6 +25,12 @@ export default function Page() {
   const { data: session } = useSession() as unknown as any;
   const [fetchedBlogData, setFetchedBlogData] = useState<PostType>();
   
+
+  useEffect(() => {
+    if (session?.user.role !== "ADMIN") {
+     redirect("/"); //redirect if role is not ADMIN
+    }
+  },[session?.user.role]);
 
   const {
     register,
@@ -254,3 +260,6 @@ console.log("param", postParam)
     </Box>
   );
 }
+
+
+

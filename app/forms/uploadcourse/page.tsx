@@ -589,17 +589,15 @@ export default function Page() {
                 </Grid>
 
                 <Grid container item xs={12} md={6}>
-                  <Input
-                    register={register(courseSlug? "Instructor.name" : "Instructor", {
-                      required: "Field is required",
-                    })}
-                    label="Instructor name"
-                    id="Instructor"
-                    type="text"
-                    name="Instructor"
-                    error={!!errors.Instructor}
-                    helperText={errors.Instructor?.message}
-                  />
+                <TextField
+                fullWidth
+                label="Instructor"
+                {...register("Instructor.name", {
+                  required: "Field is required",
+                })}
+                error={!!errors.Instructor}
+                helperText={errors.Instructor?.message}
+              />
                 </Grid>
               </Grid>
 
@@ -642,3 +640,7 @@ export default function Page() {
     </>
   );
 }
+
+
+
+

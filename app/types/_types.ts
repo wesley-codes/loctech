@@ -54,20 +54,19 @@ export type SignUpType = {
 };
 
 export type InstructorType = {
-  id: string
   name: string;
-  email: string | undefined;
-  instructorImage: string | undefined;
-  bio: string | undefined;
-  rating: number | undefined;
-  reviews: string | undefined;
-  facebook: string | undefined;
-  twitter: string | undefined;
-  instagram: string | undefined;
-  linkedin: string | undefined;
-  reviewer: string | undefined;
-  reviewerImage: string | undefined;
-  reviewerComment: string | undefined;
+  email: string 
+  image: string 
+  bio: string 
+  rating: number 
+  reviews: string 
+  facebook: string 
+  twitter: string 
+  instagram: string 
+  linkedin: string 
+  reviewer: string 
+  reviewerImage: string | null
+  reviewerComment: string 
 };
 
 export type HeroType = {

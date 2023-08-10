@@ -10,11 +10,11 @@ export default function InstructorItem({ instructors }: InstructorItemType) {
     <>
       {instructors.map((instructor, index) => (
         <InstructorCard
-        id={instructor.id!}
+        key={index}
           name={instructor.name}
           bio={instructor.bio}
           rating={instructor.rating}
-          instructorImage={instructor.instructorImage}
+          image={instructor.image}
         />
       ))}
     </>
