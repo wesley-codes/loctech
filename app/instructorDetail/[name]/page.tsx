@@ -32,7 +32,7 @@ async function getInstructorDetail(name: string) {
   return await res.json();
 }
 
-export default async function page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const instructorSlug = params.name;
   const { data: session } = useSession() as unknown as any;
 
