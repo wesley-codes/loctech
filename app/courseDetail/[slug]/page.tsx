@@ -46,6 +46,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
+
   const DeleteCourse = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const res = await fetch("/api/course/" + courseSlug, {
       method: "DELETE",
@@ -97,7 +98,7 @@ export default async function Page({ params }: PageProps) {
             <Objectives objectives={courseData?.learningObj} />
             <Perquisite prerequisites={courseData?.prerequisites} />
             <Audience target={courseData?.targetAud} />
-            <Curriculum />
+            <Curriculum  curriculum={courseData.curriculumList} />
 
             <Grid
               container

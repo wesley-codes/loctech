@@ -17,10 +17,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import BasicModal from "@/app/components/Modal";
-import { redirect , useRouter} from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { booleanOptions, categoryOptions } from "@/app/utils/data";
 import { tokens } from "@/app/lib/theme";
 import { useSearchParams } from "next/navigation";
+import Spinner from "@/app/components/Spinner";
 
 export default function Page() {
   const theme = useTheme();
@@ -28,9 +29,9 @@ export default function Page() {
 
   const colors = tokens(theme.palette.mode);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [mount, setMount] = useState(false);
   const { data: session } = useSession() as unknown as any;
   const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const searchParams = useSearchParams();
@@ -45,9 +46,7 @@ export default function Page() {
     }
   }, [session?.user.role]);
 
-  useEffect(() => {
-    setMount(true);
-  }, []);
+ 
   const {
     //useForm Hook
     register,
@@ -82,12 +81,12 @@ export default function Page() {
   });
 
   useEffect(() => {
+    setLoading(true);
     if (courseSlug) {
       //if param exist fetch databyslug
       axios
         .get<CourseType>(`/api/course/` + courseSlug)
         .then((response) => {
-          console.log(typeof response.data.isTrending);
           if (response.data) {
             //setting all values from the backend
             setValue("courseTitle", response.data.courseTitle);
@@ -114,7 +113,8 @@ export default function Page() {
           console.log("postparam insude useEffext", courseSlug, error);
         });
     }
-  }, [courseSlug, setValue]);
+    setLoading(false);
+  }, [courseSlug, setValue,]);
 
   const {
     fields: prerequisitesField,
@@ -217,7 +217,7 @@ export default function Page() {
       isTrending: values.isTrending === "true", //converting the string values to boolen
       isOnline: values.isOnline === "true", //converting the string values to boolen
       description: values.description,
-      //if courseParam is true pass in the  respective array values than spreading them 
+      //if courseParam is true pass in the  respective array values than spreading them
       prerequisites: courseSlug
         ? values.prerequisites
         : values.prerequisites.map(({ name }) => name?.trim()), // converting   prerequisites from array of objects to array of strings
@@ -240,6 +240,7 @@ export default function Page() {
     console.log(data);
     if (session.user.role === "ADMIN") {
       if (courseSlug) {
+        setLoading(true);
         axios
           .patch(`/api/course/${courseSlug}`, data)
           .then((response) => {
@@ -247,8 +248,7 @@ export default function Page() {
             if (response.data) {
               setIsError(false);
               setOpen(true);
-              router.push("/courses")
-            
+              router.push("/courses");
             }
           })
           .catch((error) => {
@@ -256,7 +256,10 @@ export default function Page() {
             setIsError(true);
             setOpen(true);
           });
+        setLoading(false);
       } else {
+        setLoading(true);
+
         axios
           .post("/api/course", data)
           .then((response) => {
@@ -272,131 +275,148 @@ export default function Page() {
             setIsError(true);
             setOpen(true);
           });
+        setLoading(false);
       }
     }
   };
 
   return (
     <>
-      {mount && (
-        <Box sx={{ p: { xs: "10px 25px", md: "20px 50px" } }}>
-          <form onSubmit={handleSubmit(submitHandler)}>
-            <Header title="Add Course" btnText="Upload course" />
-            <hr />
+      <Box sx={{ p: { xs: "10px 25px", md: "20px 50px" } }}>
+{loading && <Spinner/>}
+      {loading  ?  (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="fixed inset-0 bg-gray-800 opacity-50"></div>
 
-            {isError ? (
-              <BasicModal
-                color="red"
-                icon={
-                  <ErrorOutlineIcon sx={{ color: "red", fontSize: "30px" }} />
-                }
-                title="Course did not upload !"
-                description="An error occurred. Try again"
-                open={open}
-                handleClose={handleClose}
-              />
-            ) : (
-              <BasicModal
-                color="green"
-                icon={
-                  <CheckCircleOutlineIcon
-                    sx={{ color: "green", fontSize: "30px" }}
-                  />
-                }
-                title="Course uploaded successful!"
-                description="congratulations !. Your course have been uploaded"
-                open={open}
-                handleClose={handleClose}
-              />
-            )}
+              <div className="bg-white p-6 rounded shadow-lg w-64">
+                <Spinner />
+                <div className="mt-4">
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) :      
 
-            <Grid container m="1rem 0">
-              <CourseStepper title="Course Information" number={1} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <Grid container item xs={12} md={6}>
-                  <Input
-                    label="Title of course"
-                    id="course-title"
-                    type="text"
-                    register={register("courseTitle", {
-                      required: "Field is required",
-                    })}
-                    name="courseTitle"
-                    error={!!errors.courseTitle}
-                    helperText={errors.courseTitle?.message}
-                  />
-                </Grid>
-                <Grid container item xs={12} md={6}>
-                  <Input
-                    register={register("courseSlug", {
-                      required: "Field is required",
-                    })}
-                    label="Slug"
-                    id="Slug-title"
-                    type="text"
-                    name="courseSlug"
-                    error={!!errors.courseSlug}
-                    helperText={errors.courseSlug?.message}
-                  />
-                </Grid>
-                <Grid container item xs={12} md={6}>
-                  <Input
-                    label="Course price"
-                    name="coursePrice"
-                    register={register("coursePrice", {
-                      required: "Field is required",
-                    })}
-                    id="Course-price"
-                    type="number"
-                    error={!!errors.coursePrice}
-                    helperText={errors.coursePrice?.message}
-                  />
-                </Grid>
-                <Grid container item xs={12} md={6}>
-                  <DropDown
-                    placeHolder="Select course category"
-                    options={categoryOptions}
-                    register={register("category", {
-                      required: "Field is required",
-                    })}
-                    error={!!errors.category}
-                    errorMessage={
-                      errors.category && (
-                        <p style={{ color: "red" }}>
-                          {errors.category.message}
-                        </p>
-                      )
-                    }
-                    control={control}
-                    setValue={setValue}
-                    name="category"
-                  />
-                </Grid>
-                <Grid container item xs={12}>
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="description"
-                    multiline
-                    placeholder="Course description"
-                    rows={30}
-                    error={!!errors.description}
-                    helperText={errors.description?.message}
-                    fullWidth
-                    {...register("description", {
-                      required: "This filed id required",
-                    })}
-                    sx={{
-                      border: `2px solid ${colors.rose[500]}`,
-                      borderRadius: "8px",
-                    }}
-                  />
-                </Grid>
-                {/* <Draft
+
+
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <Header title="Add Course" btnText="Upload course" />
+          <hr />
+
+
+          {isError ? (
+            <BasicModal
+              color="red"
+              icon={
+                <ErrorOutlineIcon sx={{ color: "red", fontSize: "30px" }} />
+              }
+              title="Course did not upload !"
+              description="An error occurred. Try again"
+              open={open}
+              handleClose={handleClose}
+            />
+          ) : (
+            <BasicModal
+              color="green"
+              icon={
+                <CheckCircleOutlineIcon
+                  sx={{ color: "green", fontSize: "30px" }}
+                />
+              }
+              title="Course uploaded successful!"
+              description="congratulations !. Your course have been uploaded"
+              open={open}
+              handleClose={handleClose}
+            />
+          )}
+
+          <Grid container m="1rem 0">
+            <CourseStepper title="Course Information" number={1} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <Grid container item xs={12} md={6}>
+                <Input
+                  label="Title of course"
+                  id="course-title"
+                  type="text"
+                  register={register("courseTitle", {
+                    required: "Field is required",
+                  })}
+                  name="courseTitle"
+                  error={!!errors.courseTitle}
+                  helperText={errors.courseTitle?.message}
+                />
+              </Grid>
+              <Grid container item xs={12} md={6}>
+                <Input
+                  register={register("courseSlug", {
+                    required: "Field is required",
+                  })}
+                  label="Slug"
+                  id="Slug-title"
+                  type="text"
+                  name="courseSlug"
+                  error={!!errors.courseSlug}
+                  helperText={errors.courseSlug?.message}
+                />
+              </Grid>
+              <Grid container item xs={12} md={6}>
+                <Input
+                  label="Course price"
+                  name="coursePrice"
+                  register={register("coursePrice", {
+                    required: "Field is required",
+                  })}
+                  id="Course-price"
+                  type="number"
+                  error={!!errors.coursePrice}
+                  helperText={errors.coursePrice?.message}
+                />
+              </Grid>
+              <Grid container item xs={12} md={6}>
+                <DropDown
+                  placeHolder="Select course category"
+                  options={categoryOptions}
+                  register={register("category", {
+                    required: "Field is required",
+                  })}
+                  error={!!errors.category}
+                  errorMessage={
+                    errors.category && (
+                      <p style={{ color: "red" }}>{errors.category.message}</p>
+                    )
+                  }
+                  control={control}
+                  setValue={setValue}
+                  name="category"
+                />
+              </Grid>
+              <Grid container item xs={12}>
+                <TextField
+                  id="outlined-multiline-static"
+                  label="description"
+                  multiline
+                  placeholder="Course description"
+                  rows={30}
+                  error={!!errors.description}
+                  helperText={errors.description?.message}
+                  fullWidth
+                  {...register("description", {
+                    required: "This filed id required",
+                  })}
+                  sx={{
+                    border: `2px solid ${colors.rose[500]}`,
+                    borderRadius: "8px",
+                  }}
+                />
+              </Grid>
+              {/* <Draft
                   initialContent={editorState}
                   name="description"
                   editorState={editorState}
@@ -408,239 +428,236 @@ export default function Page() {
                 {editorError && (
                   <p style={{ color: "red" }}>This field is required</p>
                 )} */}
-              </Grid>
-              {/* Course Featured */}
-              <CourseStepper title="Featured Course" number={2} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <Grid container item xs={12} md={4}>
-                  <DropDown
-                    placeHolder="does this course have a feature ?"
-                    options={booleanOptions}
-                    register={register("isFeatured", {
-                      required: "Field is required",
-                    })}
-                    error={!!errors.isFeatured}
-                    errorMessage={
-                      errors.isFeatured && (
-                        <p style={{ color: "red" }}>
-                          {errors.isFeatured.message}
-                        </p>
-                      )
-                    }
-                    // defaultValue="false"
-                    setValue={setValue}
-                    name="isFeatured"
-                    control={control}
-                  />
-                </Grid>
-                <Grid container item xs={12} md={4}>
-                  <DropDown
-                    placeHolder="Is course online ?"
-                    options={booleanOptions}
-                    register={register("isOnline", {
-                      required: "Field is required",
-                    })}
-                    error={!!errors.isOnline}
-                    errorMessage={
-                      errors.isOnline && (
-                        <p style={{ color: "red" }}>
-                          {errors.isOnline.message}
-                        </p>
-                      )
-                    }
-                    // defaultValue="false"
-                    setValue={setValue}
-                    name="isOnline"
-                    control={control}
-                  />
-                </Grid>
-
-                <Grid container item xs={12} md={4}>
-                  <DropDown
-                    placeHolder="Is course trending ?"
-                    options={booleanOptions}
-                    register={register("isTrending", {
-                      required: "Field is required",
-                    })}
-                    error={!!errors.isTrending}
-                    errorMessage={
-                      errors.isTrending && (
-                        <p style={{ color: "red" }}>
-                          {errors.isTrending.message}
-                        </p>
-                      )
-                    }
-                    // defaultValue="false"
-                    setValue={setValue}
-                    name="isTrending"
-                    control={control}
-                  />
-                </Grid>
-              </Grid>
-
-              {/* Course Prequisiite */}
-
-              <CourseStepper title="Course Prerequisites" number={3} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <DynamicField
-                  label="Add Prerequisites Objectives"
-                  fields={prerequisitesField}
-                  registeredName="prerequisites"
-                  register={register}
-                  onAppendHandler={onAppendPrerequisitesHandler}
-                  btnText="Add Prerequisites"
-                  error={errors.prerequisites}
-                  params={courseSlug}
-                  helperText={errors.prerequisites?.message}
+            </Grid>
+            {/* Course Featured */}
+            <CourseStepper title="Featured Course" number={2} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <Grid container item xs={12} md={4}>
+                <DropDown
+                  placeHolder="does this course have a feature ?"
+                  options={booleanOptions}
+                  register={register("isFeatured", {
+                    required: "Field is required",
+                  })}
+                  error={!!errors.isFeatured}
+                  errorMessage={
+                    errors.isFeatured && (
+                      <p style={{ color: "red" }}>
+                        {errors.isFeatured.message}
+                      </p>
+                    )
+                  }
+                  // defaultValue="false"
+                  setValue={setValue}
+                  name="isFeatured"
+                  control={control}
                 />
               </Grid>
-              {/* Learning Objectives */}
-              <CourseStepper title=" Learning Objectives " number={4} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <DynamicField
-                  label="Add Learning Objectives"
-                  fields={learningObjField}
-                  registeredName="learningObj"
-                  register={register}
-                  onAppendHandler={onAppendLearningObjHandler}
-                  btnText="Add Learning Obj"
-                  params={courseSlug}
-                  error={errors.learningObj}
-                  helperText={errors.learningObj?.message}
-                />
-              </Grid>
-              {/* curriculum List */}
-              <CourseStepper title=" Course Curriculum" number={5} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <DynamicField
-                  label="Add Course Curriculum List"
-                  fields={curriculumField}
-                  registeredName="curriculumList"
-                  register={register}
-                  params={courseSlug}
-                  onAppendHandler={onAppendCurriculumListHandler}
-                  btnText="Add Curriculum List"
-                  error={errors.curriculumList}
-                  helperText={errors.curriculumList?.message}
+              <Grid container item xs={12} md={4}>
+                <DropDown
+                  placeHolder="Is course online ?"
+                  options={booleanOptions}
+                  register={register("isOnline", {
+                    required: "Field is required",
+                  })}
+                  error={!!errors.isOnline}
+                  errorMessage={
+                    errors.isOnline && (
+                      <p style={{ color: "red" }}>{errors.isOnline.message}</p>
+                    )
+                  }
+                  // defaultValue="false"
+                  setValue={setValue}
+                  name="isOnline"
+                  control={control}
                 />
               </Grid>
 
-              {/* Target audience */}
-              <CourseStepper title=" Target audience" number={6} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <DynamicField
-                  label="Add Target Audience"
-                  fields={targetAudField}
-                  registeredName="targetAud"
-                  register={register}
-                  params={courseSlug}
-                  onAppendHandler={onAppendTargetAudHandler}
-                  btnText="Add Target Audience"
-                  error={errors.targetAud}
-                  helperText={errors.targetAud?.message}
+              <Grid container item xs={12} md={4}>
+                <DropDown
+                  placeHolder="Is course trending ?"
+                  options={booleanOptions}
+                  register={register("isTrending", {
+                    required: "Field is required",
+                  })}
+                  error={!!errors.isTrending}
+                  errorMessage={
+                    errors.isTrending && (
+                      <p style={{ color: "red" }}>
+                        {errors.isTrending.message}
+                      </p>
+                    )
+                  }
+                  // defaultValue="false"
+                  setValue={setValue}
+                  name="isTrending"
+                  control={control}
                 />
-              </Grid>
-
-              {/* Curriculum */}
-              <CourseStepper title="Add Curriculm & Instructor" number={7} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <Grid container item xs={12} md={6}>
-                  <Input
-                    register={register("curriculum", {
-                      required: "Field is required",
-                    })}
-                    label="Curriculum"
-                    id="curriculum"
-                    type="text"
-                    name="curriculum"
-                    error={!!errors.curriculum}
-                    helperText={errors.curriculum?.message}
-                  />
-                </Grid>
-
-                <Grid container item xs={12} md={6}>
-                <TextField
-                fullWidth
-                label="Instructor"
-                {...register("Instructor.name", {
-                  required: "Field is required",
-                })}
-                error={!!errors.Instructor}
-                helperText={errors.Instructor?.message}
-              />
-                </Grid>
-              </Grid>
-
-              {/* Course Media */}
-              <CourseStepper title=" Course Media" number={8} />
-              <Grid
-                container
-                item
-                rowSpacing={3}
-                columnSpacing={{ xs: 0, md: 3 }}
-              >
-                <Grid container item xs={12} md={6}>
-                  <ImageUpload
-                    onChange={(value) => setCustomValue("imageSrc", value)}
-                    value={imageSrc}
-                    register={register}
-                    error={errors}
-                    placeholder="Course Image"
-                  />
-                </Grid>
-
-                <Grid container item xs={12} md={12} direction="column">
-                  <VideoUpload
-                    onChange={(value: string) => setCustomValue("video", value)}
-                    duration={(value: number) =>
-                      setCustomValue("duration", value)
-                    }
-                    value={videoSrc}
-                    register={register}
-                    error={errors}
-                    ref={videoRef as unknown as any}
-                    placeholder="Course Video"
-                  />
-                </Grid>
               </Grid>
             </Grid>
-          </form>
-        </Box>
-      )}
+
+            {/* Course Prequisiite */}
+
+            <CourseStepper title="Course Prerequisites" number={3} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <DynamicField
+                label="Add Prerequisites Objectives"
+                fields={prerequisitesField}
+                registeredName="prerequisites"
+                register={register}
+                onAppendHandler={onAppendPrerequisitesHandler}
+                btnText="Add Prerequisites"
+                error={errors.prerequisites}
+                params={courseSlug}
+                helperText={errors.prerequisites?.message}
+              />
+            </Grid>
+            {/* Learning Objectives */}
+            <CourseStepper title=" Learning Objectives " number={4} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <DynamicField
+                label="Add Learning Objectives"
+                fields={learningObjField}
+                registeredName="learningObj"
+                register={register}
+                onAppendHandler={onAppendLearningObjHandler}
+                btnText="Add Learning Obj"
+                params={courseSlug}
+                error={errors.learningObj}
+                helperText={errors.learningObj?.message}
+              />
+            </Grid>
+            {/* curriculum List */}
+            <CourseStepper title=" Course Curriculum" number={5} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <DynamicField
+                label="Add Course Curriculum List"
+                fields={curriculumField}
+                registeredName="curriculumList"
+                register={register}
+                params={courseSlug}
+                onAppendHandler={onAppendCurriculumListHandler}
+                btnText="Add Curriculum List"
+                error={errors.curriculumList}
+                helperText={errors.curriculumList?.message}
+              />
+            </Grid>
+
+            {/* Target audience */}
+            <CourseStepper title=" Target audience" number={6} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <DynamicField
+                label="Add Target Audience"
+                fields={targetAudField}
+                registeredName="targetAud"
+                register={register}
+                params={courseSlug}
+                onAppendHandler={onAppendTargetAudHandler}
+                btnText="Add Target Audience"
+                error={errors.targetAud}
+                helperText={errors.targetAud?.message}
+              />
+            </Grid>
+
+            {/* Curriculum */}
+            <CourseStepper title="Add Curriculm & Instructor" number={7} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <Grid container item xs={12} md={6}>
+                <Input
+                  register={register("curriculum", {
+                    required: "Field is required",
+                  })}
+                  label="Curriculum"
+                  id="curriculum"
+                  type="text"
+                  name="curriculum"
+                 
+                  error={!!errors.curriculum}
+                  helperText={errors.curriculum?.message}
+                />
+              </Grid>
+
+              <Grid container item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Instructor"
+                  {...register("Instructor.name", {
+                    required: "Field is required",
+                  })}
+                  error={!!errors.Instructor}
+                  helperText={errors.Instructor?.message}
+                  variant="filled"
+                />
+              </Grid>
+            </Grid>
+
+            {/* Course Media */}
+            <CourseStepper title=" Course Media" number={8} />
+            <Grid
+              container
+              item
+              rowSpacing={3}
+              columnSpacing={{ xs: 0, md: 3 }}
+            >
+              <Grid container item xs={12} md={6}>
+                <ImageUpload
+                  onChange={(value) => setCustomValue("imageSrc", value)}
+                  value={imageSrc}
+                  register={register}
+                  error={errors}
+                  placeholder="Course Image"
+                />
+              </Grid>
+
+              <Grid container item xs={12} md={12} direction="column">
+                <VideoUpload
+                  onChange={(value: string) => setCustomValue("video", value)}
+                  duration={(value: number) =>
+                    setCustomValue("duration", value)
+                  }
+                  value={videoSrc}
+                  register={register}
+                  error={errors}
+                  ref={videoRef as unknown as any}
+                  placeholder="Course Video"
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </form>
+        }
+      </Box>
+      )
     </>
   );
 }
-
-
-
-

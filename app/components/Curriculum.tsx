@@ -2,7 +2,13 @@
 import React from "react";
 import { Grid, Box, Typography } from "../lib/mui";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-export default function Curriculum() {
+import { TransformedCourseType } from "../types/_types";
+
+interface CurriculumProps {
+  curriculum: string[];
+}
+
+export default function Curriculum({ curriculum }: CurriculumProps) {
   return (
     <Grid
       item
@@ -19,38 +25,29 @@ export default function Curriculum() {
         <Typography fontWeight="bold">12 weeks</Typography>
       </Grid>
       <Grid item>
-        <Grid
-          container
-          item
-          justifyContent="space-between"
-          alignItems="center"
-          m="15px 0"
-        >
-          <Typography fontSize="16px" fontWeight="normal">
-            {" "}
-            DEfine a network
-          </Typography>
+        {curriculum.map((curriculum, index) => (
+          <Grid
+          key={`${curriculum}${index}`}
+            container
+            item
+            justifyContent="space-between"
+            alignItems="center"
+            m="15px 0"
+          >
+            
+          <Grid item xs={11}>  
+          <Typography fontSize="16px" fontWeight="normal" className="line-clamp-1">
+              {" "}
+              {curriculum}
+            </Typography>
+            </Grid>
 
-          <Box>
-            <LockOutlinedIcon />
-          </Box>
-        </Grid>
-        <Grid
-          container
-          item
-          justifyContent="space-between"
-          alignItems="center"
-          m="15px 0"
-        >
-          <Typography fontSize="16px" fontWeight="normal">
-            {" "}
-            DEfine a network
-          </Typography>
-
-          <Box>
-            <LockOutlinedIcon />
-          </Box>
-        </Grid>
+            <Grid item xs={1} justifyContent="end">
+              <LockOutlinedIcon />
+            </Grid >
+          </Grid>
+        ))}
+   
       </Grid>
     </Grid>
   );

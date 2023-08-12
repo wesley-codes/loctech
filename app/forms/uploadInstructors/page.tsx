@@ -6,7 +6,6 @@ import { InstructorType } from "@/app/types/_types";
 import { ImageUpload } from "@/app/utils/ImageAndVideoUpload";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import { MuiFileInput } from "mui-file-input";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";

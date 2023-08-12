@@ -21,8 +21,8 @@ export default function Perquisite({ prerequisites }: PrerequisitesProp) {
       </Grid>
       <Grid item>
         <ul style={{ padding: "0 2rem", fontSize: "15px" }}>
-          {prerequisites.map((item) => (
-            <li key={item} style={{ listStyle: "disc", marginTop: "8px" }}>
+          {prerequisites.map((item,index) => (
+            <li key={`${item}${index}`} style={{ listStyle: "disc", marginTop: "8px" }}>
               {item}
             </li>
           ))}

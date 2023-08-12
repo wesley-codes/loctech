@@ -21,8 +21,8 @@ export default function Objectives({ objectives }: ObjectivesProp) {
       </Grid>
       <Grid item>
         <ul style={{ padding: "0 2rem", fontSize: "15px" }}>
-          {objectives.map((item) => (
-            <li key={item} style={{ listStyle: "none", marginTop: "8px" }}>
+          {objectives.map((item,index) => (
+            <li key={`${item}${index}`} style={{ listStyle: "none", marginTop: "8px" }}>
               {item}
             </li>
           ))}

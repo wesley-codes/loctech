@@ -8,7 +8,7 @@ import StarRating from "@/app/components/Rating";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedinIcon from "@mui/icons-material/Linkedin";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Link from "next/link";
 import CustomButton from "@/app/components/Button";
 import { notFound } from "next/navigation";
@@ -38,7 +38,6 @@ export default async function page({ params }: PageProps) {
 
   const instructor: InstructorType = await getInstructorDetail(instructorSlug);
   const [instructorData] = await Promise.all([instructor]);
-  console.log(params.name);
   if (!instructorData) {
     notFound();
   }
@@ -48,7 +47,11 @@ export default async function page({ params }: PageProps) {
         <Grid container justifyContent="center">
           <Box>
             <Image
-              src={  instructorData.image == null  ?  "/profile.png" : instructorData.image}
+              src={
+                instructorData.image == null
+                  ? "/profile.png"
+                  : instructorData.image
+              }
               alt="image"
               height={200}
               width={200}
@@ -87,17 +90,7 @@ export default async function page({ params }: PageProps) {
           margin="15px 0"
         >
           <Typography variant="h4" fontWeight="light">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
-            ratione! Tenetur molestias quo tempore assumenda explicabo, repellat
-            nostrum praesentium itaque laudantium accusamus pariatur natus
-            ducimus sint velit consequatur unde temporibus. Earum modi tenetur
-            possimus nisi quos consequatur sapiente et vel ducimus iusto vero
-            veniam, eaque, tempore nulla similique porro laborum ratione
-            architecto provident? Cumque fugit sequi expedita obcaecati magnam
-            maiores? Accusamus ullam accusantium explicabo, hic alias animi
-            iure! Alias, odio. Eaque est atque obcaecati repellendus deserunt
-            assumenda cumque blanditiis nesciunt tempora. Ab atque quibusdam,
-            commodi fugit eum odio in harum.
+            {instructorData.bio}
           </Typography>
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
@@ -113,7 +106,7 @@ export default async function page({ params }: PageProps) {
           </Grid>
           <Grid item>
             <Link href="https://twitter.com/DaveyHert">
-              <LinkedinIcon />
+              <LinkedInIcon />
             </Link>{" "}
           </Grid>
 
@@ -124,18 +117,22 @@ export default async function page({ params }: PageProps) {
           </Grid>
         </Grid>
 
-  {  session?.user.role === "ADMIN" &&    <Link href={`forms/uploadInstructors?name=${instructorSlug}`}>
-          <CustomButton
-            title="Update Instructor"
-            sx={{
-              backgroundColor: "#ff539c",
-              fontWeight: "bold",
-              fontSize: "18px",
-              color: "#fff",
-              m: "0 15px",
-            }}
-          />
-        </Link>}
+        {session?.user.role === "ADMIN" && (
+          <Grid container justifyContent="center">
+            <Link href={`forms/uploadInstructors?name=${instructorSlug}`}>
+              <CustomButton
+                title="Update Instructor"
+                sx={{
+                  backgroundColor: "#ff539c",
+                  fontWeight: "bold",
+                  fontSize: "18px",
+                  color: "#fff",
+                  m: "0 15px",
+                }}
+              />
+            </Link>
+          </Grid>
+        )}
       </Box>
     </AnimatedRoute>
   );

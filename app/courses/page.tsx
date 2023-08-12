@@ -1,12 +1,13 @@
 export const dynamic = "force-dynamic"; // this is the fix
 
-import React from "react";
+import React, { Suspense } from "react";
 import AnimatedRoute from "../components/AnimatedRoute";
 import { Box, Grid } from "../lib/mui";
 import FeaturedItem from "../components/Featured/FeaturedItem";
 import { CourseType } from "../types/_types";
 import { notFound } from "next/navigation";
 import prisma from "@/prisma/prisma";
+import Spinner from "../components/Spinner";
 
 async function getCourses() {
   const courses = await prisma.course.findMany();
@@ -31,7 +32,9 @@ export default async function page() {
           rowSpacing={3}
           p="2rem 0"
         >
-          <FeaturedItem courses={course as unknown as CourseType[]} />
+       <Suspense fallback={<Spinner/>}>
+       <FeaturedItem courses={course as unknown as CourseType[]} />
+       </Suspense>
         </Grid>
       </Box>
     </AnimatedRoute>

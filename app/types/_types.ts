@@ -35,6 +35,7 @@ export type TransformedCourseType = CourseType & {
    learningObj: string[] ; 
    prerequisites: string[]
    targetAud: string[]
+   curriculumList : string[]
 };
 export interface OptionProps {
   value: string;

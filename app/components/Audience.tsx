@@ -15,8 +15,8 @@ export default function Audience({ target }: AudienceProp) {
       </Grid>
       <Grid item>
         <ul style={{ padding: "0 2rem", fontSize: "15px" }}>
-          {target.map((target) => (
-            <li key={target} style={{ listStyle: "disc", marginTop: "8px" }}>
+          {target.map((target, index) => (
+            <li key={`${target}${index}`} style={{ listStyle: "disc", marginTop: "8px" }}>
               {target}
             </li>
           ))}
