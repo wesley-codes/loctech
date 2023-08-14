@@ -76,10 +76,7 @@ export default function NavContent() {
               {/* Content for the right side */}
 
               <Box display="flex" alignItems="center">
-                <IconButton>
-                  <SearchIcon sx={{ fontSize: "20px" }} />
-                </IconButton>
-
+              
                 <IconButton onClick={colorMode.toggleColorMode}>
                   {theme.palette.mode === "light" ? (
                     <LightModeOutlinedIcon />
@@ -90,7 +87,7 @@ export default function NavContent() {
                 <NavItem title="Home" to="/" />
                 <NavItem title="Courses" to="/courses" />
                 <NavItem title="Blog" to="/blog" />
-                <NavItem title="About us" to="/" />
+                <NavItem title="About us" to="/about-us" />
                 {session?.user.role === "ADMIN" && (
                   <NavItem title="Forms" to="/forms" />
                 )}
@@ -125,14 +122,7 @@ export default function NavContent() {
             flexDirection="column"
             alignItems="start"
           >
-            <Grid
-              container
-              justifyContent={{ xs: "flex-start", md: "flex-end" }}
-            >
-              <IconButton>
-                <SearchIcon sx={{ fontSize: "20px" }} />
-              </IconButton>
-            </Grid>
+       
 
             <Grid
               container
@@ -146,13 +136,31 @@ export default function NavContent() {
                 )}
               </IconButton>
             </Grid>
-
             <NavItem title="Home" to="/" />
-            <NavItem title="Courses" to="/" />
+                <NavItem title="Courses" to="/courses" />
+                <NavItem title="Blog" to="/blog" />
+                <NavItem title="About us" to="/about-us" />
+                {session?.user.role === "ADMIN" && (
+                  <NavItem title="Forms" to="/forms" />
+                )}
 
-            <NavItem title="About us" to="/" />
+                <NavItem title="Instructors" to="/instructor" />
 
-            <NavItem title="Instructors" to="/instructor" />
+                {status === "authenticated" ? (
+                  <div onClick={SignOutHandler}>
+                    <Typography
+                      variant="h5"
+                      fontWeight="bold"
+                      color={colors.rose[100]}
+                      textAlign={{ xs: "start", md: "center" }}
+                      sx={{ m: "0 5px", p: "5px", cursor: "pointer" }}
+                    >
+                      SignOut
+                    </Typography>
+                  </div>
+                ) : (
+                  <NavItem title="SignIn" to="/signIn" />
+                )}
           </Box>
         </Box>
       )}

@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"; // this is the fix
 
-import React from "react";
+import React, { Suspense } from "react";
 import { Box, Grid } from "../lib/mui";
 import Image from "next/image";
 import AnimatedRoute from "../components/AnimatedRoute";
@@ -8,6 +8,7 @@ import Card from "../components/BlogCard/Card";
 import prisma from "@/prisma/prisma";
 import CardItem from "../components/BlogCard/CardItem";
 import { PostType } from "../types/_types";
+import Spinner from "../components/Spinner";
 async function getBlog() {
   const blog = await prisma.post.findMany();
   if (!blog) {
@@ -22,7 +23,7 @@ export default async function Blog() {
 
   const blogData = await getBlog();
   const [blog] = await Promise.all([blogData]);
- 
+
   return (
     <AnimatedRoute>
       <Grid container>
@@ -41,7 +42,9 @@ export default async function Blog() {
         rowSpacing={3}
         columnSpacing={{ xs: 0, md: 3 }}
       >
-        <CardItem blogs={blog as unknown as PostType[]} />
+        <Suspense fallback={<Spinner />}>
+          <CardItem blogs={blog as unknown as PostType[]} />
+        </Suspense>
       </Grid>
     </AnimatedRoute>
   );

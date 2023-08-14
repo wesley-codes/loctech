@@ -80,7 +80,7 @@ export default async function Page({ params }: PageProps) {
           <Typography variant="h2" fontWeight="bold">
             {instructorData.rating}
           </Typography>
-          <StarRating rating={4.6} />
+          <StarRating rating={instructorData.rating} />
         </Grid>
 
         <Grid
@@ -123,11 +123,8 @@ export default async function Page({ params }: PageProps) {
               <CustomButton
                 title="Update Instructor"
                 sx={{
-                  backgroundColor: "#ff539c",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                  color: "#fff",
-                  m: "0 15px",
+                
+                  m: "15px",
                 }}
               />
             </Link>

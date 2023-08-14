@@ -59,13 +59,7 @@ export default function Hero({ data }: HeroProps) {
                 whileHover={{ scale: 1.1, backgroundColor: colors.rose[600]}}
                 variant="contained"
                 size="large"
-                sx={{
-                  backgroundColor: colors.rose[500],
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                  color: "#fff",
-             
-                }}
+            
               >
                 {hero.button}
               </MotionBtn>
@@ -82,10 +76,8 @@ export default function Hero({ data }: HeroProps) {
                     variant="contained"
                     size="large"
                     sx={{
-                      bgColor: colors.rose[500],
-                      fontWeight: "bold",
+              
                       fontSize: "18px",
-                      color: colors.primary[900],
                       cursor: "pointer",
                       mt:"10px"
                     }}

@@ -9,12 +9,18 @@ import Audience from "@/app/components/Audience";
 import Curriculum from "@/app/components/Curriculum";
 import CourseTag from "@/app/components/CourseTag";
 import AnimatedRoute from "@/app/components/AnimatedRoute";
-import { CourseType, TransformedCourseType } from "@/app/types/_types";
+import {
+  CourseType,
+  InstructorType,
+  TransformedCourseType,
+} from "@/app/types/_types";
 import { notFound, redirect, useRouter } from "next/navigation";
 
 import CustomButton from "@/app/components/Button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
+import StarRating from "@/app/components/Rating";
 type PageProps = {
   params: {
     slug: string;
@@ -33,6 +39,18 @@ async function getCourseDetail(slug: string) {
   return await res.json();
 }
 
+async function getInstructorDetail(name: string) {
+  const res = await fetch("/api/instructors/" + name, {
+    method: "GET",
+    cache: "no-cache",
+  });
+  if (!res.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  return await res.json();
+}
+
 export default async function Page({ params }: PageProps) {
   //theme and styles
   const router = useRouter();
@@ -40,12 +58,18 @@ export default async function Page({ params }: PageProps) {
   const courseSlug = params?.slug;
   const { data: session } = useSession() as unknown as any;
   const courseData: TransformedCourseType = await getCourseDetail(courseSlug);
-  const [course] = await Promise.all([courseData]);
+  const courseInstructor: InstructorType = await getInstructorDetail(
+    courseData.Instructor.name
+  );
+  const [course, instructor] = await Promise.all([
+    courseData,
+    courseInstructor,
+  ]);
 
   if (!course) {
     notFound();
   }
-
+  console.log("instructor", instructor);
 
   const DeleteCourse = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const res = await fetch("/api/course/" + courseSlug, {
@@ -94,11 +118,49 @@ export default async function Page({ params }: PageProps) {
             </Grid>
 
             {/* course description */}
-            <CourseDesc description={courseData?.description} />
-            <Objectives objectives={courseData?.learningObj} />
-            <Perquisite prerequisites={courseData?.prerequisites} />
-            <Audience target={courseData?.targetAud} />
-            <Curriculum  curriculum={courseData.curriculumList} />
+            <Grid>
+              <CourseDesc description={courseData?.description} />
+              <Objectives objectives={courseData?.learningObj} />
+              <Perquisite prerequisites={courseData?.prerequisites} />
+              <Audience target={courseData?.targetAud} />
+              <Curriculum curriculum={courseData.curriculumList} />
+            </Grid>
+
+            <Grid>
+              <a href={courseData.curriculum} download>
+                <Button>Click here to see curriculum</Button>
+              </a>
+            </Grid>
+
+            <Grid container mt="15px" >
+              <Grid container item xs={3}>
+                <Image
+                  src={
+                    instructor.image == null ? "/profile.png" : instructor.image
+                  }
+                  alt="image"
+                  height={200}
+                  width={200}
+                  blurDataURL="/spinner.svg"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                    borderRadius:"50px",
+                  }}
+                />
+              </Grid>
+              <Grid container item xs={9}  margin="15px 0"  >
+                <Grid container>
+                  <Typography variant="h3" fontWeight="bold">
+                    {instructor.name}
+                  </Typography>
+                </Grid>
+                <Grid container>
+                  <StarRating rating={instructor.rating} />
+                </Grid>
+              </Grid>
+            </Grid>
 
             <Grid
               container
@@ -111,10 +173,6 @@ export default async function Page({ params }: PageProps) {
                 title="Delete Course"
                 onClick={DeleteCourse}
                 sx={{
-                  backgroundColor: "#ff539c",
-                  fontWeight: "bold",
-                  fontSize: "18px",
-                  color: "#fff",
                   m: "0 15px",
                 }}
               />
@@ -123,10 +181,6 @@ export default async function Page({ params }: PageProps) {
                 <CustomButton
                   title="Update Course"
                   sx={{
-                    backgroundColor: "#ff539c",
-                    fontWeight: "bold",
-                    fontSize: "18px",
-                    color: "#fff",
                     m: "0 15px",
                   }}
                 />

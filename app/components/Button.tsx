@@ -22,7 +22,7 @@ export default function CustomButton({ title, sx, onClick }: ButtonType) {
         <MotionBtn
           whileHover={{
             scale: 1.1,
-            backgroundColor: colors.rose[600],
+            // backgroundColor: colors.rose[600],
           }}
           variant="contained"
           size="large"

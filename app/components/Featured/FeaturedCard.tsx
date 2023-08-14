@@ -19,7 +19,7 @@ export default function FeaturedCard({
   description,
 }: FeaturedCourseArrType) {
   const MotionGrid = motion(Grid);
-  const { status } = useSession() 
+  const { status } = useSession();
   return (
     <MotionGrid
       whileHover={{ scale: 1.1, margin: "10px " }}
@@ -31,7 +31,7 @@ export default function FeaturedCard({
       md={3}
       gridAutoColumns={5}
     >
-      <Link href={ status == "unauthenticated" ? "/signIn":`/courseDetail/${slug}`} style={{ width: "100%" }}>
+      <Box width="100%">
         <Image
           src={img}
           width={500}
@@ -44,26 +44,73 @@ export default function FeaturedCard({
             objectFit: "cover",
           }}
         />
-        <Grid container alignItems="flex-start">
-          <Grid container item xs={10}>
-            <Typography variant="h4" fontWeight="bold" mt="8px">
-              {title}
-            </Typography>
-          </Grid>
-        </Grid>
+      </Box>
+      <Grid>
+        <Typography variant="h4" fontWeight="bold" mt="8px">
+          {title}
+        </Typography>
+      </Grid>
+      <Grid container>
         <p className="line-clamp-2">{description}</p>
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="flex-end"
-        >
-          <Typography fontWeight="bold" variant="h5">
-            N {price}
-          </Typography>
-          <Typography fontWeight="normal">12 weeks</Typography>
-        </Grid>
-      </Link>
+      </Grid>
+      <Grid
+    container
+    direction="row"
+    justifyContent="space-between"
+    alignItems="flex-end"
+  >
+    <Typography fontWeight="bold" variant="h5">
+      N {price}
+    </Typography>
+    <Typography fontWeight="normal">12 weeks</Typography>
+  </Grid>
     </MotionGrid>
   );
+}
+
+{
+  /* <Link
+href={status == "unauthenticated" ? "/signIn" : `/courseDetail/${slug}`}
+style={{ width: "100%" }}
+>
+<Image
+  src={img}
+  width={500}
+  height={500}
+  alt="course"
+  style={{
+    borderRadius: "8px",
+    width: "100%",
+    height: "300px",
+    objectFit: "cover",
+  }}
+/>
+<Grid
+  container
+  alignItems="flex-start"
+ 
+  border="2px solid red"
+>
+  <Grid container item xs={10}>
+    <Typography variant="h4" fontWeight="bold" mt="8px">
+      {title}
+    </Typography>
+  </Grid>
+
+  <Grid container>
+    <p className="line-clamp-2">{description}</p>
+  </Grid>
+  <Grid
+    container
+    direction="row"
+    justifyContent="space-between"
+    alignItems="flex-end"
+  >
+    <Typography fontWeight="bold" variant="h5">
+      N {price}
+    </Typography>
+    <Typography fontWeight="normal">12 weeks</Typography>
+  </Grid>
+</Grid>
+</Link> */
 }

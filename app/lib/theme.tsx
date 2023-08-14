@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { createContext, useState, useMemo, useEffect } from "react";
 import { Nunito } from "next/font/google";
-import { PaletteMode} from "./mui";
+import { PaletteMode } from "./mui";
 import { createTheme, Theme } from "@mui/material/styles";
 
 const nunito = Nunito({ subsets: ["latin"] });
@@ -151,7 +151,39 @@ export const themeSettings = (mode: PaletteMode) => {
         fontSize: 14,
       },
     },
-    
+    components: {
+
+      MuiInputLabel: {
+        styleOverrides: {
+          root: {
+            // Add your label styling here
+            color: colors.grey[500], // Example color
+            fontWeight: "bold",
+            "&.Mui-focused": {
+              color: colors.rose[500],
+            },
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          // Name of the slot
+          root: {
+            // Some CSS
+            fontSize: '1rem',
+            backgroundColor: colors.rose[500],
+            color:"#fff",
+            fontWeight: "bold",
+            "&:hover": {
+              color: "#fff",
+              backgroundColor: colors.rose[600],
+
+            },
+            
+          },
+        },
+      },
+    },
   };
 };
 
@@ -166,13 +198,12 @@ export const ColorModeContext = createContext<ColorModeContextType>({
 });
 
 export const useMode = (): [Theme, ColorModeContextType] => {
- 
-const [getLs, setLs] = useState<PaletteMode>("light")
+  const [getLs, setLs] = useState<PaletteMode>("light");
 
-useEffect(()=>{
-  const storedMode = localStorage.getItem("colorMode") as PaletteMode; //get mode from localstorage
-  setLs(storedMode) 
-})
+  useEffect(() => {
+    const storedMode = localStorage.getItem("colorMode") as PaletteMode; //get mode from localstorage
+    setLs(storedMode);
+  });
 
   const [mode, setMode] = useState<PaletteMode>(getLs);
   useEffect(() => {

@@ -28,9 +28,9 @@ export default function Page() {
       <Link href="/forms/heroUpload" style={{ width: "100%" }}>
         <Header title="Upload Hero" btnText="Upload Hero" />
       </Link>
-      <Link href="/forms/testimonial" style={{ width: "100%" }}>
+      {/* <Link href="/forms/testimonial" style={{ width: "100%" }}>
         <Header title="Upload Testimonial" btnText="Upload Testimonial" />
-      </Link>
+      </Link> */}
       <Link href="/forms/blog" style={{ width: "100%" }}>
         <Header title="Upload Blog" btnText="Upload  Blog" />
       </Link>

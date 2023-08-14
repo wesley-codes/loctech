@@ -302,7 +302,7 @@ export default function Page() {
 
 
         <form onSubmit={handleSubmit(submitHandler)}>
-          <Header title="Add Course" btnText="Upload course" />
+          <Header title={courseSlug ?"Update this course": "Add Course"} btnText={courseSlug ?"Update Course" : "Upload course" }/>
           <hr />
 
 

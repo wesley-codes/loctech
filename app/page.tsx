@@ -49,9 +49,9 @@ export default async function Home() {
             <Card
               title="Visit our classroom courses"
               subtitle="New Certificates"
-              btnText="View More courses"
+              btnText="Find Out More"
               initialX="-100vw"
-              link = "/offline-courses"
+              link="/offline-courses"
             />
           </Grid>
           <Grid xs={12} md={6} item>
@@ -60,7 +60,7 @@ export default async function Home() {
               subtitle="New Certificates"
               btnText="Find Out More"
               initialX="100vw"
-              link = "/online-courses"
+              link="/online-courses"
             />
           </Grid>
         </Grid>

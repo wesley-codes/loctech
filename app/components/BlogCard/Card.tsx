@@ -4,6 +4,7 @@ import { tokens } from "@/app/lib/theme";
 import { PostType } from "@/app/types/_types";
 import { formatDate } from "@/app/utils/formatDate";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -19,6 +20,7 @@ export default function Card({ blog }: CardProps) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const MotionBtn = motion(Button);
+  const { data: session, status } = useSession() as unknown as any;
 
   return (
     <Grid
@@ -58,7 +60,7 @@ export default function Card({ blog }: CardProps) {
       </Grid>
 
      <Grid container flexDirection="column" >
-     <Link href={`/blogDetail/${blog.postSlug}`}>
+     <Link href={ status === "unauthenticated" ?  "/signIn":`/blogDetail/${blog.postSlug}`}>
         <MotionBtn
           whileHover={{ scale: 1.1, backgroundColor: colors.rose[600] }}
           variant="contained"

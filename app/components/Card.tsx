@@ -12,7 +12,7 @@ interface CardProps {
   subtitle: string;
   btnText: string;
   initialX: string;
-  link : string
+  link: string;
 }
 
 export default function Card({
@@ -20,7 +20,7 @@ export default function Card({
   subtitle,
   btnText,
   initialX,
-  link
+  link,
 }: CardProps) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -50,23 +50,20 @@ export default function Card({
             </Typography>
           </Box>
 
-         <Link href={link}>
-         <Box>
-            <MotionBtn
-              whileHover={{ scale: 1.1, backgroundColor: colors.rose[600] }}
-              variant="contained"
-              size="large"
-              sx={{
-                backgroundColor: colors.rose[500],
-                fontWeight: "bold",
-                fontSize: "14px",
-                color: "#fff",
-              }}
-            >
-              {btnText}
-            </MotionBtn>
-          </Box>
-         </Link>
+          <Link href={link}>
+            <Box>
+              <MotionBtn
+                whileHover={{ scale: 1.1, backgroundColor: colors.rose[600] }}
+                variant="contained"
+                size="large"
+                sx={{
+                  fontSize: "14px",
+                }}
+              >
+                {btnText}
+              </MotionBtn>
+            </Box>
+          </Link>
         </Box>
       </Grid>
 
