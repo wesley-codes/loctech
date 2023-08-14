@@ -5,7 +5,6 @@ interface InstructorItemType {
   instructors: InstructorType[];
 }
 export default function InstructorItem({ instructors }: InstructorItemType) {
- console.log("=======",instructors)
     return (
     <>
       {instructors.map((instructor, index) => (

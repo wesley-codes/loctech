@@ -22,7 +22,7 @@ export default function FeaturedCard({
   const { status } = useSession();
   return (
     <MotionGrid
-      whileHover={{ scale: 1.1, margin: "10px " }}
+      whileHover={{ scale: 1.1, }}
       item
       container
       width="300px"
@@ -30,8 +30,12 @@ export default function FeaturedCard({
       sm={6}
       md={3}
       gridAutoColumns={5}
+      flexDirection="column"
+      justifyContent="space-between"
     >
-      <Box width="100%">
+          <Link href={status == "unauthenticated" ? "/signIn" : `/courseDetail/${slug}`} style={{width:"100%"}}>
+
+    <Box width="100%">
         <Image
           src={img}
           width={500}
@@ -64,6 +68,8 @@ export default function FeaturedCard({
     </Typography>
     <Typography fontWeight="normal">12 weeks</Typography>
   </Grid>
+  </Link>
+
     </MotionGrid>
   );
 }
