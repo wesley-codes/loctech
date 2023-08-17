@@ -22,7 +22,7 @@ export default function Team() {
 
         <Grid container justifyContent="center" item xs={6}>
           <Typography variant="h5" textAlign="center">
-            We're a small team that loves to create great experiences and make
+            We&apos;re a small team that loves to create great experiences and make
             meaningful connections between builders and customers. Join our
             team!
           </Typography>
