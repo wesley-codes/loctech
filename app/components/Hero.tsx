@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"; // this is the fix
+
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
@@ -31,7 +33,7 @@ export default function Hero({ data }: HeroProps) {
           container
           spacing={2}
           sx={{
-            flexDirection: { xs: "column-reverse", md: "row" },
+            flexDirection: { xs: "column", md: "row" },
           }}
         >
           <Grid
@@ -40,11 +42,11 @@ export default function Hero({ data }: HeroProps) {
             sm={6}
             sx={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               flexDirection: "column",
             }}
           >
-            <Box>
+            <Box mt={{xs:"5rem", md:"9rem"}}>
               <Typography variant="h1" fontWeight="bold">
                 {hero.title}
               </Typography>
@@ -90,27 +92,65 @@ export default function Hero({ data }: HeroProps) {
             )}
           </Grid>
           <MotionGrid
+          container
             item
             xs={12}
             sm={6}
+           columnSpacing={3}
             initial={{ x: "-100vw" }}
             animate={{ x: 0 }}
             transition={{ ease: "easeOut", duration: 2 }}
           >
-            <Image
-              src={hero.image}
-              width={400}
-              height={400}
+           <Grid item  container flexDirection="column" xs={6} sm={6} alignItems="flex-end" justifyContent="flex-end">
+           <Image
+              src="/Rectangle 8.png"
+              width={100}
+              height={100}
               alt="pexels-cottonbro-studio-5083408.png"
-              style={{
-                width: "100%",
-                borderRadius: "8px",
-                height: "650px",
-                objectFit: "cover",
-              }}
+         
               placeholder="blur"
               blurDataURL="/spinner.svg"
             />
+           <Image
+             src="/Rectangle 6.png"
+              width={300}
+              height={300}
+              alt="pexels-cottonbro-studio-5083408.png"
+              style={{
+                objectFit:"cover",
+               
+               }}
+              placeholder="blur"
+              blurDataURL="/spinner.svg"
+            />
+           </Grid>
+
+
+
+
+           <Grid item  container flexDirection="column" xs={6} sm={6} alignItems="flex-start">
+           <Image
+ src="/boy2.png"
+               width={300}
+              height={300}
+              alt="pexels-cottonbro-studio-5083408.png"
+              style={{
+                objectFit:"cover",
+            
+               }}
+              placeholder="blur"
+              blurDataURL="/spinner.svg"
+            />
+           <Image
+             src="/Union.png"
+              width={100}
+              height={100}
+              alt="pexels-cottonbro-studio-5083408.png"
+             
+              placeholder="blur"
+              blurDataURL="/spinner.svg"
+            />
+           </Grid>
           </MotionGrid>
         </Grid>
       ))}

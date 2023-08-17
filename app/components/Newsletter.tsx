@@ -25,14 +25,14 @@ export default function Newsletter() {
         justifyContent="center"
         alignItems="center"
       >
-        <Box sx={{ textAlign: { xs: "center", md: "start" } }}>
-          <Typography variant="h4" fontWeight="bold">
+        <Box sx={{ textAlign: { xs: "center", md: "start" } }} width={{xs:"100%", md:"80%"}}>
+          <Typography variant="h2" fontWeight="bold">
             {" "}
-            Achieve Your Goals With Loctech IT Training Institute
+            Accelerate Your Productivity{" "}
           </Typography>
-          <Typography variant="h5" m="8px">
-            Create an account to receive our newsletter, course recommendations
-            and promotions.
+          <Typography variant="h4" m="15px 0">
+            Explore over 300 courses spanning over Data science/ software
+            engineering/ Cloud computing all free.
           </Typography>
 
           <MotionBtn
@@ -45,7 +45,7 @@ export default function Newsletter() {
               fontWeight: "bold",
             }}
           >
-            Register for free
+            Explore Courses
           </MotionBtn>
         </Box>
       </Grid>
@@ -60,14 +60,14 @@ export default function Newsletter() {
         sx={{ display: { xs: "none", md: "flex" } }}
       >
         <Image
-          src="/smiling-young-african-college-student-doing-KYGJVRW (1).png"
+          src="/Desktop.png"
           alt=""
           width={200}
           height={200}
           style={{
             objectFit: "cover",
             borderRadius: "8px",
-            width: "300px",
+            width: "400px",
           }}
         />
       </Grid>

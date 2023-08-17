@@ -64,7 +64,7 @@ export default async function Home() {
             />
           </Grid>
         </Grid>
-        <FeatureHeader title="Explore Featured Courses" />
+        <FeatureHeader title="Level up your skills with expert knowledge." />
         <Grid
           container
           direction="row"

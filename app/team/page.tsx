@@ -8,6 +8,7 @@ import InstructorCard from "../components/Instructor/InstructorCard";
 import prisma from "@/prisma/prisma";
 import { InstructorType } from "@/app/types/_types";
 import InstructorItem from "../components/Instructor/InstructorItem";
+import Team from "../components/Team";
 
 async function getInstructor() {
   const instructor = await prisma.instructor.findMany();
@@ -25,11 +26,7 @@ export default async function page() {
     <AnimatedRoute>
       <Box sx={{ p: { xs: "10px 25px", md: "20px 50px" } }}>
         <Grid container item md={12} justifyContent="center" m="2rem 0">
-          <Grid container item justifyContent="space-between">
-            <Typography variant="h3" fontWeight="bold">
-              Your Instructors
-            </Typography>
-          </Grid>
+         <Team/>
           <Grid
             container
             item

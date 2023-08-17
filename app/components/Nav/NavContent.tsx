@@ -17,7 +17,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ColorModeContext, tokens } from "@/app/lib/theme";
 import { useSession, signOut } from "next-auth/react";
-import {  redirect, useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 export default function NavContent() {
   const theme = useTheme();
@@ -35,8 +35,7 @@ export default function NavContent() {
   // },[status. router]);
 
   const SignOutHandler = () => {
-    signOut({callbackUrl:"/signIn"});
-    
+    signOut({ callbackUrl: "/signIn" });
   };
 
   const handleDrawer = () => {
@@ -76,7 +75,6 @@ export default function NavContent() {
               {/* Content for the right side */}
 
               <Box display="flex" alignItems="center">
-              
                 <IconButton onClick={colorMode.toggleColorMode}>
                   {theme.palette.mode === "light" ? (
                     <LightModeOutlinedIcon />
@@ -92,7 +90,7 @@ export default function NavContent() {
                   <NavItem title="Forms" to="/forms" />
                 )}
 
-                <NavItem title="Instructors" to="/instructor" />
+                <NavItem title="Team" to="/team" />
 
                 {status === "authenticated" ? (
                   <div onClick={SignOutHandler}>
@@ -122,8 +120,6 @@ export default function NavContent() {
             flexDirection="column"
             alignItems="start"
           >
-       
-
             <Grid
               container
               justifyContent={{ xs: "flex-start", md: "flex-end" }}
@@ -137,30 +133,30 @@ export default function NavContent() {
               </IconButton>
             </Grid>
             <NavItem title="Home" to="/" />
-                <NavItem title="Courses" to="/courses" />
-                <NavItem title="Blog" to="/blog" />
-                <NavItem title="About us" to="/about-us" />
-                {session?.user.role === "ADMIN" && (
-                  <NavItem title="Forms" to="/forms" />
-                )}
+            <NavItem title="Courses" to="/courses" />
+            <NavItem title="Blog" to="/blog" />
+            <NavItem title="About us" to="/about-us" />
+            {session?.user.role === "ADMIN" && (
+              <NavItem title="Forms" to="/forms" />
+            )}
 
-                <NavItem title="Instructors" to="/instructor" />
+            <NavItem title="Team" to="/team" />
 
-                {status === "authenticated" ? (
-                  <div onClick={SignOutHandler}>
-                    <Typography
-                      variant="h5"
-                      fontWeight="bold"
-                      color={colors.rose[100]}
-                      textAlign={{ xs: "start", md: "center" }}
-                      sx={{ m: "0 5px", p: "5px", cursor: "pointer" }}
-                    >
-                      SignOut
-                    </Typography>
-                  </div>
-                ) : (
-                  <NavItem title="SignIn" to="/signIn" />
-                )}
+            {status === "authenticated" ? (
+              <div onClick={SignOutHandler}>
+                <Typography
+                  variant="h5"
+                  fontWeight="bold"
+                  color={colors.rose[100]}
+                  textAlign={{ xs: "start", md: "center" }}
+                  sx={{ m: "0 5px", p: "5px", cursor: "pointer" }}
+                >
+                  SignOut
+                </Typography>
+              </div>
+            ) : (
+              <NavItem title="SignIn" to="/signIn" />
+            )}
           </Box>
         </Box>
       )}

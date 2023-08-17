@@ -89,7 +89,7 @@ export default async function Page({ params }: PageProps) {
           alignItems="center"
           margin="15px 0"
         >
-          <Typography variant="h4" fontWeight="light">
+          <Typography variant="h5" fontWeight="light" lineHeight={2}>
             {instructorData.bio}
           </Typography>
         </Grid>
@@ -123,7 +123,6 @@ export default async function Page({ params }: PageProps) {
               <CustomButton
                 title="Update Instructor"
                 sx={{
-                
                   m: "15px",
                 }}
               />

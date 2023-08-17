@@ -43,7 +43,7 @@ export default function Footer() {
             About Us
           </Typography>
           <Typography mt="10px">Courses</Typography>
-          <Typography mt="10px">Instructor</Typography>
+          <Typography mt="10px">Team</Typography>
           <Typography mt="10px">Events</Typography>
           <Typography mt="10px">Become A Teacher</Typography>
         </Grid>
