@@ -22,7 +22,7 @@ export default function Page() {
             Get to know us
           </Typography>
           <Typography variant="h3" m="15px 0">
-            We're just getting started
+            We&apos;re just getting started
           </Typography>
           <Box>
             <Image
