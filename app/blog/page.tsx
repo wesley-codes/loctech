@@ -9,7 +9,7 @@ import RecentCard from "../components/BlogCard/RecentCard";
 import { getPostsMeta } from "../lib/posts";
 import Spinner from "../components/Spinner";
 
-export default async function Blog() {
+export default async function Page() {
   const posts = await getPostsMeta();
 console.log("posts", posts)
   if (!posts) {
