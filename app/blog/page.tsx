@@ -1,5 +1,4 @@
 export const dynamic = "force-dynamic"; // this is the fix
-//@ts-ignore
 import React, { Suspense } from "react";
 import { Box, Grid, Typography } from "../lib/mui";
 import Image from "next/image";
@@ -8,10 +7,11 @@ import Card from "../components/BlogCard/Card";
 import CardItem from "../components/BlogCard/CardItem";
 import RecentCard from "../components/BlogCard/RecentCard";
 import { getPostsMeta } from "../lib/posts";
+import Spinner from "../components/Spinner";
 
 export default async function Blog() {
   const posts = await getPostsMeta();
-
+console.log("posts", posts)
   if (!posts) {
     return <p className="mt-10 text-center">Sorry, no posts available.</p>;
   }
@@ -106,7 +106,10 @@ export default async function Blog() {
           rowSpacing={3}
           p="2rem 0"
         >
+          <Suspense fallback={<Spinner/>}>
           <CardItem meta={posts} />
+          </Suspense>
+     
         </Grid>
       </Box>
     </AnimatedRoute>
