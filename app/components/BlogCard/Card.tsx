@@ -1,85 +1,95 @@
 "use client";
-import { Box, Button, Grid, Typography, useTheme } from "@/app/lib/mui";
+import {
+  Box,
+  Button,
+  Grid,
+  GridSize,
+  Typography,
+  useTheme,
+} from "@/app/lib/mui";
 import { tokens } from "@/app/lib/theme";
-import { PostType } from "@/app/types/_types";
+import { Meta, PostType } from "@/app/types/_types";
 import { formatDate } from "@/app/utils/formatDate";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import ArrowSVG from "../SVG/Arrow";
 
 interface CardProps {
-  blog: PostType;
+  grid?: boolean | GridSize | undefined;
+  meta: Meta;
 }
 
-export default function Card({ blog }: CardProps) {
-  const imageURL =
-    "https://a6e8z9v6.stackpathcdn.com/kingster/homepages/onlineacademy/wp-content/uploads/sites/4/2020/06/title-comscience.jpg";
-
+export default function Card({ grid, meta }: CardProps) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const MotionBtn = motion(Button);
-  const { data: session, status } = useSession() as unknown as any;
+  const { status } = useSession();
 
   return (
-    <Grid
-      container
-      flexDirection="column"
-      item
-      xs={12}
-      md={6}
-      maxHeight="750px"
-      m="10px 0"
-    >
-      <Box width="100%">
-        <Image
-          src={blog.image}
-          alt="image"
-          height={1000}
-          width={1000}
-          style={{ width: "100%", height: "400px", objectFit: "cover" }}
-        />
-      </Box>
-
-      <Grid container flexDirection="column" gap={1}    height={270}>
-        <Typography variant="h2" fontWeight="bold" m="10px 0">
-          {blog.title}
-        </Typography>
-
-        <Typography>
-          <span> {formatDate(blog.createdAt!)} </span>{" "}
-          <span> / BLOG / {blog.postSlug}</span>
-        </Typography>
-
-        <Box>
-          <Typography variant="h5" className="line-clamp-4" m="10px 0">
-            {blog.subtitle}
-          </Typography>
-        </Box>
-      </Grid>
-
-     <Grid container flexDirection="column" >
-     <Link href={ status === "unauthenticated" ?  "/signIn":`/blogDetail/${blog.postSlug}`}>
-        <MotionBtn
-          whileHover={{ scale: 1.1, backgroundColor: colors.rose[600] }}
-          variant="contained"
-          size="medium"
-          sx={{
-            backgroundColor: colors.rose[500],
-            fontWeight: "bold",
-            fontSize: "18px",
-            color: colors.primary[900],
-            cursor: "pointer",
-          }}
+    <>
+      <Grid container item xs={12} sm={6} md={grid} m="20px 0">
+        <Grid container item>
+          <Image
+            src={meta.metaImg}
+            width={670}
+            height={670}
+            alt="blog-image"
+            style={{ objectFit: "cover", width: "100%" }}
+          />
+        </Grid>
+        <Grid
+          container
+          item
+          flexDirection="column"
+          justifyContent="flex-start"
+          m="15px 0"
         >
-          Read More
-        </MotionBtn>
-      </Link>
-     </Grid>
-    </Grid>
+          <Typography variant="h6">
+            {" "}
+            {meta.author} • {meta.date}
+          </Typography>
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              m="8px 0"
+              className="line-clamp-1"
+              width="80%"
+            >
+              {meta.title}
+            </Typography>
+
+           <Link href={status == "unauthenticated" ? "/signIn" :`/blog/${meta.id}`}>
+           <Box>
+              <ArrowSVG />
+            </Box>
+           </Link>
+          </Grid>
+          <Grid container>
+            <Typography
+              variant="h6"
+              className="line-clamp-2"
+              color="#667085"
+              m="5px 0"
+            >
+              {meta.intro}
+            </Typography>
+          </Grid>
+
+          <Grid container m="5px 0">
+            {meta.tags.map((tag, index) => (
+              <Box key={index} bgcolor=" #FDF2FA" p="1px 5px" borderRadius="15px" mr="5px">
+                <Typography variant="h6" color="#C11574">
+                  {tag}
+                </Typography>
+              </Box>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
   );
 }
-
-
-

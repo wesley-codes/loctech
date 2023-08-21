@@ -47,20 +47,22 @@ export default async function Home() {
         >
           <Grid xs={12} md={6} item>
             <Card
-              title="Visit our classroom courses"
-              subtitle="New Certificates"
-              btnText="Find Out More"
+              title="Discover hands-on learning in our in-person courses. Join a dynamic classroom, interact with expert instructors, and collaborate with fellow students."
+              subtitle="Classroom"
+              btnText="View Courses"
               initialX="-100vw"
               link="/offline-courses"
+              image="/online.jpg"
             />
           </Grid>
           <Grid xs={12} md={6} item>
             <Card
-              title="Visit our online courses"
-              subtitle="New Certificates"
-              btnText="Find Out More"
+              title="Experience real-time, instructor-led online courses with interactive live sessions.  "
+              subtitle="Online"
+              btnText="View Courses"
               initialX="100vw"
               link="/online-courses"
+              image="/classroom.jpg"
             />
           </Grid>
         </Grid>

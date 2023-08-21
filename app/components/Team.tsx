@@ -20,7 +20,7 @@ export default function Team() {
           </Typography>
         </Grid>
 
-        <Grid container justifyContent="center" item xs={6}>
+        <Grid container justifyContent="center" item xs={12} md={6} >
           <Typography variant="h5" textAlign="center">
             We&apos;re a small team that loves to create great experiences and make
             meaningful connections between builders and customers. Join our

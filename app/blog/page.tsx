@@ -1,51 +1,114 @@
 export const dynamic = "force-dynamic"; // this is the fix
-
+//@ts-ignore
 import React, { Suspense } from "react";
-import { Box, Grid } from "../lib/mui";
+import { Box, Grid, Typography } from "../lib/mui";
 import Image from "next/image";
 import AnimatedRoute from "../components/AnimatedRoute";
 import Card from "../components/BlogCard/Card";
-import prisma from "@/prisma/prisma";
 import CardItem from "../components/BlogCard/CardItem";
-import { PostType } from "../types/_types";
-import Spinner from "../components/Spinner";
-async function getBlog() {
-  const blog = await prisma.post.findMany();
-  if (!blog) {
-    return null;
-  }
-  return blog;
-}
+import RecentCard from "../components/BlogCard/RecentCard";
+import { getPostsMeta } from "../lib/posts";
 
 export default async function Blog() {
-  const imageURL =
-    "https://a6e8z9v6.stackpathcdn.com/kingster/homepages/onlineacademy/wp-content/uploads/sites/4/2020/06/title-comscience.jpg";
+  const posts = await getPostsMeta();
 
-  const blogData = await getBlog();
-  const [blog] = await Promise.all([blogData]);
+  if (!posts) {
+    return <p className="mt-10 text-center">Sorry, no posts available.</p>;
+  }
 
   return (
     <AnimatedRoute>
-      <Grid container>
-        <Image
-          src={imageURL}
-          alt="image"
-          height={1000}
-          width={1000}
-          style={{ width: "100%", height: "400px" }}
-        />
-      </Grid>
-      <Grid
-        container
-        item
-        sx={{ p: { xs: "10px 25px", md: "20px 50px" } }}
-        rowSpacing={3}
-        columnSpacing={{ xs: 0, md: 3 }}
-      >
-        <Suspense fallback={<Spinner />}>
-          <CardItem blogs={blog as unknown as PostType[]} />
-        </Suspense>
-      </Grid>
+      <Box sx={{ p: { xs: "10px 25px", md: "20px 50px" } }}>
+        <Grid container flexDirection="column" alignItems="center">
+          <Grid>
+            <Typography
+              variant="h5"
+              fontWeight="bold"
+              color="#ff2883"
+              textAlign="center"
+            >
+              Blog
+            </Typography>
+          </Grid>
+          <Grid container item xs={12} justifyContent="center">
+            <Typography
+              variant="h3"
+              fontWeight="bold"
+              textAlign="center"
+              lineHeight={2}
+            >
+              Stay Up to-date With Industry Trends
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid>
+          <Typography variant="h4" fontWeight="bold">
+            Recent blog posts
+          </Typography>
+        </Grid>
+        <Grid container>
+          <Grid container item xs={12} md={6} pr={{ md: "2rem" }}>
+            <RecentCard
+              meta={{
+                id: posts[0].id,
+                author: posts[0].author,
+                date: posts[0].date,
+                title: posts[0].title,
+                tags: posts[0].tags,
+                intro: posts[0].intro,
+                metaImg: posts[0].metaImg,
+              }}
+            />
+          </Grid>
+
+          <Grid container item xs={12} md={6} columnSpacing={2}>
+            <Card
+              grid={12}
+              meta={{
+                id: posts[1].id,
+                author: posts[1].author,
+                date: posts[1].date,
+                title: posts[1].title,
+                tags: posts[1].tags,
+                intro: posts[1].intro,
+                metaImg: posts[1].metaImg,
+              }}
+            />
+            <Card
+              grid={12}
+              meta={{
+                id: posts[2].id,
+                author: posts[2].author,
+                date: posts[2].date,
+                title: posts[2].title,
+                tags: posts[2].tags,
+                intro: posts[2].intro,
+                metaImg: posts[2].metaImg,
+              }}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid>
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            color="#ff2883"
+            textAlign="start"
+          >
+            Popular Blogs
+          </Typography>
+        </Grid>
+        <Grid
+          container
+          columnSpacing={{ xs: 3, md: 5 }}
+          rowSpacing={3}
+          p="2rem 0"
+        >
+          <CardItem meta={posts} />
+        </Grid>
+      </Box>
     </AnimatedRoute>
   );
 }

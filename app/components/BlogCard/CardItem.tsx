@@ -1,28 +1,30 @@
 export const dynamic = "force-dynamic"; // this is the fix
 
-import { PostType } from "@/app/types/_types";
+import { Meta, PostType } from "@/app/types/_types";
 import React from "react";
 import Card from "./Card";
 import prisma from "@/prisma/prisma";
-interface CardItemProps {
-  blogs: PostType[];
+import { getPostsMeta } from "@/app/lib/posts";
+
+interface CardItem {
+  meta: Meta[];
 }
 
-export default function CardItem({ blogs }: CardItemProps) {
+export default function CardItem({ meta }: CardItem) {
   return (
     <>
-      {blogs.map((blog, index) => (
+      {meta.slice(3).map((blog, index) => (
         <Card
-          key={`${index} + ${blog.title}`}
-          blog={{
-            title: blog.title,
-            subtitle: blog.subtitle,
-            postSlug: blog.postSlug,
-            image: blog.image,
-            content: blog.content,
+          key={`${blog}${index}`}
+          grid={4}
+          meta={{
+            id: blog.id,
             author: blog.author,
-            createdAt: blog.createdAt,
-          
+            date: blog.date,
+            title: blog.title,
+            tags: blog.tags,
+            intro: blog.intro,
+            metaImg: blog.metaImg,
           }}
         />
       ))}

@@ -1,3 +1,5 @@
+import { JSXElementConstructor, ReactElement } from "react";
+
 export type FeaturedCourseArrType = {
   id?: string;
   img: string;
@@ -19,23 +21,23 @@ export type CourseType = {
   isFeatured: string;
   isTrending: string;
   isOnline: string;
-  prerequisites: { name:null | string }[];
-  learningObj: { name:null | string }[];
-  curriculumList: { name:null | string }[];
-  targetAud: { name:null  | string}[];
+  prerequisites: { name: null | string }[];
+  learningObj: { name: null | string }[];
+  curriculumList: { name: null | string }[];
+  targetAud: { name: null | string }[];
   video: string | null;
   imageSrc: string;
   duration: number;
   curriculum: string;
-  Instructor: {name : string};
+  Instructor: { name: string };
 };
 
 // Define a type that transforms 'learningObj' to an array of strings
 export type TransformedCourseType = CourseType & {
-   learningObj: string[] ; 
-   prerequisites: string[]
-   targetAud: string[]
-   curriculumList : string[]
+  learningObj: string[];
+  prerequisites: string[];
+  targetAud: string[];
+  curriculumList: string[];
 };
 export interface OptionProps {
   value: string;
@@ -56,18 +58,18 @@ export type SignUpType = {
 
 export type InstructorType = {
   name: string;
-  email: string 
-  image: string 
-  bio: string 
-  rating: number 
-  reviews: string 
-  facebook: string 
-  twitter: string 
-  instagram: string 
-  linkedin: string 
-  reviewer: string 
-  reviewerImage: string | null
-  reviewerComment: string 
+  email: string;
+  image: string;
+  bio: string;
+  rating: number;
+  reviews: string;
+  facebook: string;
+  twitter: string;
+  instagram: string;
+  linkedin: string;
+  reviewer: string;
+  reviewerImage: string | null;
+  reviewerComment: string;
 };
 
 export type HeroType = {
@@ -84,25 +86,35 @@ export type TestimonialType = {
   review: string;
 };
 
-
-export  type PostType ={
-title: string
-subtitle: string
-postSlug: string
-image : string
-content: string
-author: {
-  name: string
-}
-createdAt?: string
-
-}
-
+export type PostType = {
+  title: string;
+  subtitle: string;
+  postSlug: string;
+  image: string;
+  content: string;
+  author: {
+    name: string;
+  };
+  createdAt?: string;
+};
 
 export type AuthorType = {
-id: string
-name: string
-image?: string
+  id: string;
+  name: string;
+  image?: string;
+};
 
+export type Meta = {
+  id: string;
+  author: string;
+  title: string;
+  date: string;
+  tags: string[];
+  intro: string;
+  metaImg: string
+};
 
-}
+export type BlogPost = {
+  meta: Meta;
+  content: ReactElement<any, string | JSXElementConstructor<any>>;
+};

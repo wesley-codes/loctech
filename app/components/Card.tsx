@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box, Typography, Grid, useTheme, Button } from "../lib/mui";
+import { Box, Typography, Grid, useTheme, Button, imageListClasses } from "../lib/mui";
 tokens;
 import Image from "next/image";
 import { tokens } from "../lib/theme";
@@ -13,6 +13,7 @@ interface CardProps {
   btnText: string;
   initialX: string;
   link: string;
+  image: string
 }
 
 export default function Card({
@@ -21,6 +22,7 @@ export default function Card({
   btnText,
   initialX,
   link,
+  image
 }: CardProps) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -42,10 +44,10 @@ export default function Card({
       <Grid item xs={8} container alignItems="center" direction="row">
         <Box>
           <Box>
-            <Typography variant="h6">{subtitle}</Typography>
+            <Typography variant="h4" fontWeight="bold">{subtitle}</Typography>
           </Box>
           <Box m="8px 0">
-            <Typography variant="h4" fontWeight="bold">
+            <Typography variant="h6" lineHeight={1.5} >
               {title}
             </Typography>
           </Box>
@@ -69,11 +71,11 @@ export default function Card({
 
       <Grid item xs={4} container alignItems="center" direction="row">
         <Image
-          src="/smiling-young-african-college-student-doing-KYGJVRW (1).png"
+          src={image}
           width={300}
           height={300}
-          alt="pexels-cottonbro-studio-5083408.png"
-          style={{ width: "100%", borderRadius: "8px", objectFit: "cover" }}
+          alt="classrom or online"
+          style={{ height:"200px", borderRadius: "8px", objectFit: "cover" }}
         />
       </Grid>
     </MotionGrid>
